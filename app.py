@@ -1,6 +1,7 @@
 from flask import Flask
 from config import Config
 from models.base import db
+from models.partida import Partida
 from routes import register_routes
 
 def create_app(config_class=Config):
@@ -9,6 +10,10 @@ def create_app(config_class=Config):
     
     # Initialize extensions
     db.init_app(app)
+    
+    # Create tables if missing
+    with app.app_context():
+        db.create_all()
     
     # Register blueprints
     register_routes(app)
