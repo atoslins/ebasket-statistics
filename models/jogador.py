@@ -9,7 +9,7 @@ class Jogador(db.Model):
     @classmethod
     def get_all_jogadores(cls):
         """
-        Extract unique player names from the partidas table since there's no jogadores table yet
+        Extract unique player names from the matches table since there's no jogadores table yet
         """
         from models.partida import Partida
         

@@ -2,7 +2,7 @@ from models.base import db
 from datetime import datetime
 
 class Partida(db.Model):
-    __tablename__ = 'partidas'
+    __tablename__ = 'matches'
     
     id = db.Column(db.Integer, primary_key=True)
     data = db.Column(db.Date)
