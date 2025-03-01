@@ -5,8 +5,8 @@ class Partida(db.Model):
     __tablename__ = 'matches'
     
     id = db.Column(db.Integer, primary_key=True)
-    player1_id = db.Column(db.Integer, db.ForeignKey('players.id'), nullable=False)
-    player2_id = db.Column(db.Integer, db.ForeignKey('players.id'), nullable=False)
+    player1_id = db.Column(db.Integer, db.ForeignKey('jogadores.id'), nullable=False)
+    player2_id = db.Column(db.Integer, db.ForeignKey('jogadores.id'), nullable=False)
     score_player1 = db.Column(db.Integer, nullable=False)
     score_player2 = db.Column(db.Integer, nullable=False)
     date = db.Column(db.DateTime, default=datetime.utcnow)
