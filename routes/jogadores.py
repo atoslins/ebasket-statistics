@@ -8,30 +8,32 @@ jogadores_bp = Blueprint('jogadores', __name__)
 
 @jogadores_bp.route('/')
 def index():
-    jogadores = Jogador.query.order_by(Jogador.name).all()
+    jogadores = Jogador.get_all_jogadores()
     return render_template('index.html', jogadores=jogadores)
 
 @jogadores_bp.route('/api/jogadores')
 def get_jogadores():
-    jogadores = Jogador.query.order_by(Jogador.name).all()
-    return jsonify([{'id': j.id, 'name': j.name} for j in jogadores])
+    jogadores = Jogador.get_all_jogadores()
+    return jsonify(jogadores)
 
-@jogadores_bp.route('/api/jogadores/<int:jogador_id>/adversarios')
-def get_adversarios(jogador_id):
+@jogadores_bp.route('/api/jogadores/<string:jogador_name>/adversarios')
+def get_adversarios(jogador_name):
     # Find all players who have played against the selected player
-    subquery = db.session.query(Partida.player2_id.distinct())\
-        .filter(Partida.player1_id == jogador_id).subquery()
+    adversarios_query = db.session.query(Partida.time2_jogador.distinct())\
+        .filter(Partida.time1_jogador == jogador_name)
     
-    subquery2 = db.session.query(Partida.player1_id.distinct())\
-        .filter(Partida.player2_id == jogador_id).subquery()
+    adversarios_query2 = db.session.query(Partida.time1_jogador.distinct())\
+        .filter(Partida.time2_jogador == jogador_name)
     
-    adversarios = Jogador.query\
-        .filter(or_(
-            Jogador.id.in_(subquery),
-            Jogador.id.in_(subquery2)
-        ))\
-        .filter(Jogador.id != jogador_id)\
-        .order_by(Jogador.name)\
-        .all()
+    # Combine results and remove duplicates
+    adversarios_names = set([a[0] for a in adversarios_query.all() if a[0]] + 
+                           [a[0] for a in adversarios_query2.all() if a[0]])
     
-    return jsonify([{'id': j.id, 'name': j.name} for j in adversarios])
+    # Remove the player themselves
+    if jogador_name in adversarios_names:
+        adversarios_names.remove(jogador_name)
+    
+    # Format for JSON response
+    adversarios = [{'id': idx, 'name': name} for idx, name in enumerate(sorted(adversarios_names), 1)]
+    
+    return jsonify(adversarios)
