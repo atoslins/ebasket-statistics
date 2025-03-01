@@ -2,18 +2,23 @@ from models.base import db
 from datetime import datetime
 
 class Partida(db.Model):
-    __tablename__ = 'matches'
+    __tablename__ = 'partidas'
     
     id = db.Column(db.Integer, primary_key=True)
-    player1_id = db.Column(db.Integer, db.ForeignKey('jogadores.id'), nullable=False)
-    player2_id = db.Column(db.Integer, db.ForeignKey('jogadores.id'), nullable=False)
-    score_player1 = db.Column(db.Integer, nullable=False)
-    score_player2 = db.Column(db.Integer, nullable=False)
-    date = db.Column(db.DateTime, default=datetime.utcnow)
+    data = db.Column(db.Date)
+    hora = db.Column(db.String)
+    arena = db.Column(db.String)
+    status = db.Column(db.String)
     
-    # Relationships
-    player1 = db.relationship('Jogador', foreign_keys=[player1_id], backref='matches_as_player1')
-    player2 = db.relationship('Jogador', foreign_keys=[player2_id], backref='matches_as_player2')
+    time1_nome = db.Column(db.String)
+    time1_jogador = db.Column(db.String)
+    time1_placar_final = db.Column(db.Integer)
+    time1_placar_periodos = db.Column(db.String)
+    
+    time2_nome = db.Column(db.String)
+    time2_jogador = db.Column(db.String)
+    time2_placar_final = db.Column(db.Integer)
+    time2_placar_periodos = db.Column(db.String)
     
     def __repr__(self):
-        return f'<Partida {self.player1.name} vs {self.player2.name} ({self.score_player1}-{self.score_player2})>'
+        return f'<Partida {self.time1_nome} vs {self.time2_nome} ({self.time1_placar_final}-{self.time2_placar_final})>'
