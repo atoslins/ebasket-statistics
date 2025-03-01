@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}Seleção de Jogadores - Histórico de Confrontos{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h2 class="h5 mb-0">Selecione os Jogadores</h2>
+            </div>
+            <div class="card-body">
+                <form id="confrontoForm" action="{{ url_for('confrontos.show_confrontos') }}" method="get">
+                    <div class="mb-3">
+                        <label for="player1" class="form-label">Jogador 1</label>
+                        <select class="form-select" id="player1" name="player1" required>
+                            <option value="">Selecione um jogador</option>
+                            {% for player in players %}
+                            <option value="{{ player }}">{{ player }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="player2" class="form-label">Jogador 2</label>
+                        <select class="form-select" id="player2" name="player2" required disabled>
+                            <option value="">Selecione um jogador</option>
+                        </select>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary" id="submitBtn" disabled>Ver Histórico de Confrontos</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function() {
+        // When player1 is selected, fetch opponents
+        $('#player1').change(function() {
+            const player1 = $(this).val();
+            const player2Select = $('#player2');
+            
+            // Reset player2 select
+            player2Select.empty().append('<option value="">Selecione um jogador</option>');
+            player2Select.prop('disabled', true);
+            $('#submitBtn').prop('disabled', true);
+            
+            if (player1) {
+                // Fetch opponents for player1
+                $.getJSON("{{ url_for('jogadores.get_player_opponents') }}", {player: player1}, function(data) {
+                    if (data.length > 0) {
+                        // Add opponents to player2 select
+                        $.each(data, function(index, player) {
+                            player2Select.append($('<option></option>').val(player).text(player));
+                        });
+                        player2Select.prop('disabled', false);
+                    } else {
+                        player2Select.append($('<option></option>').val('').text('Nenhum adversário encontrado'));
+                    }
+                });
+            }
+        });
+        
+        // Enable submit button when player2 is selected
+        $('#player2').change(function() {
+            $('#submitBtn').prop('disabled', !$(this).val());
+        });
+    });
+</script>
+{% endblock %}
