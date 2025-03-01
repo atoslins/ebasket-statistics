@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request
 from sqlalchemy import or_, and_
 from models.partida import Partida
 from models.base import db
+from statistics.stats_engine import get_confronto_statistics
 
 confrontos_bp = Blueprint('confrontos', __name__)
 
@@ -21,4 +22,11 @@ def show_confrontos():
         )
     ).order_by(Partida.data.desc()).all()
     
-    return render_template('confrontos.html', matches=matches, player1=player1, player2=player2)
+    # Get statistics for this confrontation
+    estatisticas = get_confronto_statistics(player1, player2)
+    
+    return render_template('confrontos.html', 
+                          matches=matches, 
+                          player1=player1, 
+                          player2=player2,
+                          estatisticas=estatisticas)
