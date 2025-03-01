@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block title %}Confrontos entre {{ jogador1.name }} e {{ jogador2.name }}{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <a href="{{ url_for('jogadores.index') }}" class="btn btn-secondary">← Voltar</a>
+    </div>
+</div>
+
+{% if error %}
+<div class="alert alert-danger">{{ error }}</div>
+{% else %}
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+        <h2 class="mb-0">Confrontos entre {{ jogador1.name }} e {{ jogador2.name }}</h2>
+    </div>
+    <div class="card-body">
+        {% if confrontos %}
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>{{ jogador1.name }}</th>
+                            <th>{{ jogador2.name }}</th>
+                            <th>Vencedor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for confronto in confrontos %}
+                        <tr>
+                            <td>{{ confronto.date.strftime('%d/%m/%Y') }}</td>
+                            <td>{{ confronto.jogador1_score }}</td>
+                            <td>{{ confronto.jogador2_score }}</td>
+                            <td>{{ confronto.vencedor }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="mt-4">
+                <h3>Resumo</h3>
+                {% set vitorias_jogador1 = confrontos|selectattr('vencedor', 'equalto', jogador1.name)|list|length %}
+                {% set vitorias_jogador2 = confrontos|selectattr('vencedor', 'equalto', jogador2.name)|list|length %}
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <h4>{{ jogador1.name }}</h4>
+                                <h1 class="display-1">{{ vitorias_jogador1 }}</h1>
+                                <p>vitórias</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <h4>{{ jogador2.name }}</h4>
+                                <h1 class="display-1">{{ vitorias_jogador2 }}</h1>
+                                <p>vitórias</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                Não foram encontrados confrontos entre {{ jogador1.name }} e {{ jogador2.name }}.
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}

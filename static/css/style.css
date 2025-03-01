@@ -1,0 +1,12 @@
+/* Custom styles for the application */
+body {
+    padding-bottom: 20px;
+}
+
+.card {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.table th {
+    background-color: #f8f9fa;
+}
