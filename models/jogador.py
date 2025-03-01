@@ -1,7 +1,7 @@
 from models.base import db
 
 class Jogador(db.Model):
-    __tablename__ = 'players'
+    __tablename__ = 'jogadores'
     
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
