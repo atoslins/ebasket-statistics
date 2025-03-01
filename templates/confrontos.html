@@ -22,14 +22,14 @@
                         <tr>
                             <th>Data</th>
                             <th>Hora</th>
-                            <th>Arena</th>
+                            <th>Placar por Períodos (Time 1)</th>
                             <th>Time</th>
                             <th>Jogador</th>
                             <th>Placar</th>
                             <th>Time</th>
                             <th>Jogador</th>
                             <th>Placar</th>
-                            <th>Status</th>
+                            <th>Placar por Períodos (Time 2)</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -37,7 +37,7 @@
                         <tr>
                             <td>{{ match.formatted_date }}</td>
                             <td>{{ match.hora }}</td>
-                            <td>{{ match.arena }}</td>
+                            <td>{{ match.time1_placar_periodos }}</td>
                             <td>{{ match.time1_nome }}</td>
                             <td class="{% if match.time1_jogador == player1 %}fw-bold text-primary{% elif match.time1_jogador == player2 %}fw-bold text-success{% endif %}">
                                 {{ match.time1_jogador }}
@@ -48,7 +48,7 @@
                                 {{ match.time2_jogador }}
                             </td>
                             <td>{{ match.time2_placar_final }}</td>
-                            <td>{{ match.status }}</td>
+                            <td>{{ match.time2_placar_periodos }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
